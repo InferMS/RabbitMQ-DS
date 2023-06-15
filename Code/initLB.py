@@ -4,12 +4,14 @@ import random
 import sys
 import threading
 import time
+import terminal
 import multiprocessing
 import grpc
 from concurrent import futures
 import redis
 
 import server_consumer, sensor_producer
+import proxy
 
 
 def main():
@@ -19,10 +21,11 @@ def main():
 
     argv = sys.argv[1:]
 
-    opts, args = getopt.getopt(argv, "p:q:s:",
+    opts, args = getopt.getopt(argv, "p:q:s:t:",
                                ["pollution_sensor=",
                                 "quality_sensor=",
-                                "servers="])
+                                "servers=",
+                                "terminals="])
 
     for opt, arg in opts:
         if opt in ['-p', '--pollution_sensor']:
@@ -31,6 +34,8 @@ def main():
             qualitySensors = arg
         elif opt in ['-s', '--servers']:
             servers_num = arg
+        elif opt in ['-t', '--terminals']:
+            terminals = arg
 
 
     r = redis.Redis(host='localhost', port=6379)
@@ -81,6 +86,16 @@ def main():
                 success = True
     time.sleep(2)
 
+    processes = []
+
+    for index in range(int(terminals)):
+        process = multiprocessing.Process(target=terminal.send_resultsServicer(index + 1).run_server, args=(index + 1,))
+        process.start()
+        processes.append(process)
+
+    process = multiprocessing.Process(target=proxy.run_client)
+    process.start()
+    processes.append(process)
     try:
         while True:
             time.sleep(86400)

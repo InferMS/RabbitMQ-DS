@@ -27,20 +27,12 @@ def create_timestamp(seconds):
 def generate_pollution_data():
     pollution_bytes = r.get("pollution".encode())
     pollution_dict = pickle.loads(pollution_bytes)
-    for x in pollution_dict.keys():
-        for y in pollution_dict[x]:
-            z = pickle.loads(y["timer_seconds"])
-            y["timer_seconds"] = z
     return pollution_dict
 
 
 def generate_wellness_data():
     wellness_bytes = r.get("wellness".encode())
     wellness_dict = pickle.loads(wellness_bytes)
-    for x in wellness_dict.keys():
-        for y in wellness_dict[x]:
-            z = pickle.loads(y["timer_seconds"])
-            y["timer_seconds"] = z
     return wellness_dict
 
 def run_client():
