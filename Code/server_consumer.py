@@ -62,7 +62,7 @@ def processPollutionData(data):
 
 def callback(ch, method, properties, body):
     data = json.loads(body)
-    print(data)
+
     if "temperature" in data:
         processMeteoData(data)
     else:
