@@ -9,7 +9,6 @@ import pika
 
 
 def sendMeteoData(sensorId):
-    print("oye q haces")
     connection = pika.BlockingConnection(
         pika.ConnectionParameters(host='localhost'))
     channel = connection.channel()
@@ -39,7 +38,6 @@ def sendMeteoData(sensorId):
 
 
 def sendPollutionData(sensorId):
-    print("asi si")
     connection = pika.BlockingConnection(
         pika.ConnectionParameters(host='127.0.0.1'))
     channel = connection.channel()
