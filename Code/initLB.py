@@ -89,13 +89,14 @@ def main():
     processes = []
 
     for index in range(int(terminals)):
-        process = multiprocessing.Process(target=terminal.send_resultsServicer(index + 1).run_server, args=(index + 1,))
+        process = multiprocessing.Process(target=terminal.send_resultsServicer().run_server, args=(index + 1,))
         process.start()
         processes.append(process)
 
     process = multiprocessing.Process(target=proxy.run_client)
     process.start()
     processes.append(process)
+    
     try:
         while True:
             time.sleep(86400)

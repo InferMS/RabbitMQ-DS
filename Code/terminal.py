@@ -1,24 +1,18 @@
-import pika
-
+import pika, json
 from terminal_service import terminal_service
-import terminal_pb2
-
-
 class send_resultsServicer:
 
-    def __init__(self, id_terminal):
+    def init(self, id_terminal):
         self.id_terminal = id_terminal
 
     def send_results(self, request, context):
-        terminal_service.send_results(request.pollution, request.wellness, self.id_terminal)
+        terminal_service.send_results(request['pollution'], request['wellness'], self.id_terminal)
 
     def callback(self, ch, method, properties, body):
-        print(body)
-        air_data = terminal_pb2.airData()
-        air_data.ParseFromString(body)
-        self.send_results(air_data, None)
+        self.send_results(json.loads(body), None)
 
     def run_server(self, id_terminal):
+        self.id_terminal = id_terminal
         connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
         channel = connection.channel()
 
