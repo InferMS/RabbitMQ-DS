@@ -96,7 +96,7 @@ def main():
     process = multiprocessing.Process(target=proxy.run_client)
     process.start()
     processes.append(process)
-    
+
     try:
         while True:
             time.sleep(86400)

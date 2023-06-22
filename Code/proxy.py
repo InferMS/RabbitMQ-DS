@@ -41,45 +41,45 @@ def run_client():
         pollution_dict = generate_pollution_data()
         wellness_dict = generate_wellness_data()
 
-        for x in pollution_dict.keys():
-            for y in pollution_dict[x]:
-                y['timer_seconds'] = timestamp
-                if p_last.get(y['id']) is None:
-                    data['pollution'][y['id']] = {
-                        'timestamp': y['timer_seconds'],
-                        'coefficient': float(y['value'])
+        for id in pollution_dict.keys():
+            for pollution_data in pollution_dict[id]:
+                pollution_data['timer_seconds'] = timestamp
+                if p_last.get(pollution_data['id']) is None:
+                    data['pollution'][pollution_data['id']] = {
+                        'timestamp': pollution_data['timer_seconds'],
+                        'coefficient': float(pollution_data['value'])
                     }
                 else:
                     if (
-                            y['timer_seconds'] == timestamp and
-                            p_last.get(y['id'])['timer_seconds'] != (y['timer_seconds'] - timesleep) and
-                            p_last.get(y['id'])['value'] != y['value']
+                            pollution_data['timer_seconds'] == timestamp and
+                            p_last.get(pollution_data['id'])['timer_seconds'] != (pollution_data['timer_seconds'] - timesleep) and
+                            p_last.get(pollution_data['id'])['value'] != pollution_data['value']
                     ):
-                        data['pollution'][y['id']] = {
-                            'timestamp': y['timer_seconds'],
-                            'coefficient': float(y['value'])
+                        data['pollution'][pollution_data['id']] = {
+                            'timestamp': pollution_data['timer_seconds'],
+                            'coefficient': float(pollution_data['value'])
                         }
-                p_last[y['id']] = y
+                p_last[pollution_data['id']] = pollution_data
 
-        for x in wellness_dict.keys():
-            for y in wellness_dict[x]:
-                y['timer_seconds'] = timestamp
-                if w_last.get(y['id']) is None:
-                    data['wellness'][y['id']] = {
-                        'timestamp': y['timer_seconds'],
-                        'coefficient': float(y['value'])
+        for id in wellness_dict.keys():
+            for wellness_data in wellness_dict[id]:
+                wellness_data['timer_seconds'] = timestamp
+                if w_last.get(wellness_data['id']) is None:
+                    data['wellness'][wellness_data['id']] = {
+                        'timestamp': wellness_data['timer_seconds'],
+                        'coefficient': float(wellness_data['value'])
                     }
                 else:
                     if (
-                            y['timer_seconds'] == timestamp and
-                            w_last.get(y['id'])['timer_seconds'] != (y['timer_seconds'] - timesleep) and
-                            w_last.get(y['id'])['value'] != y['value']
+                            wellness_data['timer_seconds'] == timestamp and
+                            w_last.get(wellness_data['id'])['timer_seconds'] != (wellness_data['timer_seconds'] - timesleep) and
+                            w_last.get(wellness_data['id'])['value'] != wellness_data['value']
                     ):
-                        data['wellness'][y['id']] = {
-                            'timestamp': y['timer_seconds'],
-                            'coefficient': float(y['value'])
+                        data['wellness'][wellness_data['id']] = {
+                            'timestamp': wellness_data['timer_seconds'],
+                            'coefficient': float(wellness_data['value'])
                         }
-                w_last[y['id']] = y
+                w_last[wellness_data['id']] = wellness_data
 
         # Publish the serialized data to the exchange
         channel.basic_publish(exchange='proxy_terminals',
