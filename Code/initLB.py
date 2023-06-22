@@ -37,7 +37,6 @@ def main():
         elif opt in ['-t', '--terminals']:
             terminals = arg
 
-
     r = redis.Redis(host='localhost', port=6379)
     pollution = dict()
     wellness = dict()

@@ -59,7 +59,6 @@ def sendPollutionData(sensorId):
                 properties=pika.BasicProperties(
                     delivery_mode=pika.spec.PERSISTENT_DELIVERY_MODE
                 ))
-            # print(" [x] Sent %r" % pollutionData)
             time.sleep(1)
     except KeyboardInterrupt:
         connection.close()
